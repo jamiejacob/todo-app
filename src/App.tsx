@@ -1,25 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { NotificationProvider } from "./context/NotificationContext";
+import { TodoProvider } from "./context/TodoContext";
+import { Suspense } from "react";
+import { Loading } from "./components/Loading";
+import Layout from "./Layout";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import EditTodo from "./pages/EditTodo";
+import Home from "./pages/Home";
 
+function MainRoutes(){
+  return(
+    <Router>
+    <Routes>
+      <Route path="/" element={<Home/>}></Route>
+      <Route path="/todo/:id" element={<EditTodo />}></Route>
+    </Routes>
+  </Router>
+  )
+}
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout>
+    <Suspense fallback={<Loading />}>
+      <NotificationProvider>
+        <TodoProvider>
+         <MainRoutes/>
+        </TodoProvider>
+      </NotificationProvider>
+    </Suspense>
+    </Layout>
   );
 }
 
